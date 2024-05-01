@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sun.mapper.EtcAttachMapper">
+
+	<insert id="insert">
+		
+		insert into ETC_ATTACH
+			(uuid, uploadPath, fileName, fileType, bno)
+		values
+			(#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{bno})
+			
+	</insert>
+	
+	<delete id="delete">
+	
+		delete from ETC_ATTACH where uuid = #{uuid}
+	
+	</delete>
+	
+	<select id="findByBno" resultType="kr.co.sun.domain.EtcAttachVO">
+	
+		select * from ETC_ATTACH where bno = #{bno}
+	
+	</select>
+	
+	<delete id="deleteAll">
+	
+		delete ETC_ATTACH where bno = #{bno}
+	
+	</delete>
+	
+	<select id="getOldFiles" resultType="kr.co.sun.domain.EtcAttachVO">
+	
+		select * from ETC_ATTACH 
+		where uploadPath = to_char(sysdate -1, 'yyyy\mm\dd')
+	
+	</select>
+
+</mapper>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sun.mapper.MovieBoardMapper">
+	
+	<sql id="pagination">
+		<trim prefix="(" suffix=") AND" prefixOverrides="OR">
+			<foreach item='item' collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="item == 'T'.toString()">
+							title like '%' || #{keyword} || '%'
+						</when>
+						<when test="item == 'C'.toString()">
+							content like '%' || #{keyword} || '%'
+						</when>
+						<when test="item == 'W'.toString()">
+							writer like '%' || #{keyword} || '%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim> 
+	</sql>
+	
+	<select id="getListWithPaging" resultType="kr.co.sun.domain.MovieBoardVO">
+		<![CDATA[
+			select 
+				bno, title, content, writer, regdate, updatedate, replycnt, readCnt
+			from 
+				(
+				select /*+INDEX_DESC(movie_board MOVIE_BOARD_PK) */
+					rownum rn, bno, title, content, writer, regdate, updatedate, replycnt, readCnt
+				from
+					movie_board
+				where
+					deleted = 'N'
+                	AND
+		]]>
+		
+		<include refid="pagination"></include>
+		
+		<![CDATA[
+			rownum <= #{pageNum} * #{amount}
+			)
+		where rn > (#{pageNum} - 1) * #{amount} 
+		]]>
+	</select>
+
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) 
+		from movie_board
+		where
+			deleted = 'N'
+			and
+		
+		<include refid="pagination"></include>
+		
+		bno > 0
+	</select>
+	
+	<insert id="insert">
+		insert into movie_board (bno, title, content, writer)
+		values (seq_movie_board.nextval, #{title}, #{content}, #{writer})
+	</insert>
+	
+	<insert id="insertSelectKey">
+		
+		<selectKey keyProperty="bno" order="BEFORE" resultType="long">
+			select seq_movie_board.nextval from dual
+		</selectKey>
+		
+		insert into movie_board (bno, title, content, writer)
+		values (#{bno}, #{title}, #{content}, #{writer})
+	</insert>
+	
+	<select id="read" resultType="kr.co.sun.domain.MovieBoardVO">
+		select * from movie_board where bno= #{bno}
+	</select>
+	
+	<update id="delete">
+		update movie_board
+		set
+			deleted = #{deleted}
+		where
+			bno = #{bno}
+	</update>
+	
+	<update id="update">
+		update movie_board
+		set
+			title = #{title},
+			content = #{content},
+			writer = #{writer},
+			updateDate = sysdate
+		where
+			bno = #{bno}
+	</update>
+	
+	<update id="updateReadCnt">
+		update movie_board
+		set
+			readcnt = #{readCnt}
+		where
+			bno = #{bno}
+	</update>
+	
+	<update id="updateReplyCnt">
+		update movie_board
+		set
+			replycnt = replycnt + #{amount} 
+		where
+			bno = #{bno}
+	</update>
+	
+</mapper>
+
+

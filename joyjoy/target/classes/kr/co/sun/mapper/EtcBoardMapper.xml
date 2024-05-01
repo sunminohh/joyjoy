@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sun.mapper.EtcBoardMapper">
+	
+	<sql id="pagination">
+		<trim prefix="(" suffix=") AND" prefixOverrides="OR">
+			<foreach item='item' collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="item == 'T'.toString()">
+							title like '%' || #{keyword} || '%'
+						</when>
+						<when test="item == 'C'.toString()">
+							content like '%' || #{keyword} || '%'
+						</when>
+						<when test="item == 'W'.toString()">
+							writer like '%' || #{keyword} || '%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim> 
+	</sql>
+	
+	<select id="getListWithPaging" resultType="kr.co.sun.domain.EtcBoardVO">
+		<![CDATA[
+			select 
+				bno, title, content, writer, regdate, updatedate, replycnt, readCnt
+			from 
+				(
+				select /*+INDEX_DESC(ETC_BOARD ETC_BOARD_PK) */
+					rownum rn, bno, title, content, writer, regdate, updatedate, replycnt, readCnt
+				from
+					ETC_BOARD
+				where
+					deleted = 'N'
+                	AND
+		]]>
+		
+		<include refid="pagination"></include>
+		
+		<![CDATA[
+			rownum <= #{pageNum} * #{amount}
+			)
+		where rn > (#{pageNum} - 1) * #{amount} 
+		]]>
+	</select>
+
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) 
+		from ETC_BOARD
+		where
+			deleted = 'N'
+			and
+		
+		<include refid="pagination"></include>
+		
+		bno > 0
+	</select>
+	
+	<insert id="insert">
+		insert into ETC_BOARD (bno, title, content, writer)
+		values (SEQ_etc_BOARD.nextval, #{title}, #{content}, #{writer})
+	</insert>
+	
+	<insert id="insertSelectKey">
+		
+		<selectKey keyProperty="bno" order="BEFORE" resultType="long">
+			select SEQ_etc_BOARD.nextval from dual
+		</selectKey>
+		
+		insert into ETC_BOARD (bno, title, content, writer)
+		values (#{bno}, #{title}, #{content}, #{writer})
+	</insert>
+	
+	<select id="read" resultType="kr.co.sun.domain.EtcBoardVO">
+		select * from ETC_BOARD where bno= #{bno}
+	</select>
+	
+	<update id="delete">
+		update ETC_BOARD
+		set
+			deleted = #{deleted}
+		where
+			bno = #{bno}
+	</update>
+	
+	<update id="update">
+		update ETC_BOARD
+		set
+			title = #{title},
+			content = #{content},
+			writer = #{writer},
+			updateDate = sysdate
+		where
+			bno = #{bno}
+	</update>
+	
+	<update id="updateReadCnt">
+		update ETC_BOARD
+		set
+			readcnt = #{readCnt}
+		where
+			bno = #{bno}
+	</update>
+	
+	<update id="updateReplyCnt">
+		update ETC_BOARD
+		set
+			replycnt = replycnt + #{amount} 
+		where
+			bno = #{bno}
+	</update>
+	
+</mapper>
+
+

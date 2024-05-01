@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.sun.mapper.HomeMapper">
+
+	<select id="getMovieList" resultType="kr.co.sun.domain.MovieBoardVO">
+		<![CDATA[
+		select /*+INDEX_DESC(movie_board MOVIE_BOARD_PK) */
+			rownum rn, bno, title, content, writer, regdate, updatedate, replycnt, readCnt
+		from
+			movie_board
+		where
+			rownum <=3
+            and deleted = 'N'
+		]]>
+	</select>
+	
+	<select id="getGameList" resultType="kr.co.sun.domain.GameBoardVO">
+		<![CDATA[
+		select /*+INDEX_DESC(game_board game_BOARD_PK) */
+			rownum rn, bno, title, content, writer, regdate, updatedate, replycnt, readCnt
+		from
+			game_board
+		where
+			rownum <=3
+            and deleted = 'N'
+		]]>
+	</select>
+	
+	<select id="getBookList" resultType="kr.co.sun.domain.BookBoardVO">
+		<![CDATA[
+		select /*+INDEX_DESC(book_board book_BOARD_PK) */
+			rownum rn, bno, title, content, writer, regdate, updatedate, replycnt, readCnt
+		from
+			book_board
+		where
+			rownum <=3
+            and deleted = 'N'
+		]]>
+	</select>
+	
+	<select id="getEtcList" resultType="kr.co.sun.domain.EtcBoardVO">
+		<![CDATA[
+		select /*+INDEX_DESC(etc_board etc_BOARD_PK) */
+			rownum rn, bno, title, content, writer, regdate, updatedate, replycnt, readCnt
+		from
+			etc_board
+		where
+			rownum <=3
+            and deleted = 'N'
+		]]>
+	</select>
+
+
+</mapper>

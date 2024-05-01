@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.sun.mapper.BookReplyMapper" >
+
+	<insert id="insert">
+		
+		insert into 
+			book_reply (rno, bno, reply, replyer)
+		values
+			(seq_book_reply.nextval, #{bno}, #{reply}, #{replyer})
+		
+	</insert>
+
+	<select id="read" resultType="kr.co.sun.domain.BookReplyVO">
+	
+		select * from book_reply where rno = #{rno}
+	
+	</select>
+	
+	<delete id="delete">
+	
+		delete from book_reply where rno = #{rno}
+	
+	</delete>
+	
+	<update id="update">
+	
+		update book_reply 
+		set
+			reply = #{reply},
+			updatedate = sysdate
+		where
+			rno = #{rno}
+	
+	</update>
+	
+	<select id="getListWithPaging" resultType="kr.co.sun.domain.BookReplyVO">
+	
+		<![CDATA[
+			select 
+				rno, bno, reply, replyer, replydate, updatedate
+			from
+			(
+				select /*+INDEX(book_reply idx_book_reply) */
+			    	rownum rn, rno, bno, reply, replyer, replyDate, updateDate
+			    from book_reply
+			    where bno = #{bno}
+			    and rno > 0
+			    and rownum <= #{pagination.pageNum} * #{pagination.amount}
+			) where 
+				rn > (#{pagination.pageNum} -1) * #{pagination.amount}
+		]]>
+	
+	</select>
+	
+	<select id="getCountByBno" resultType="int">
+	
+		<![CDATA[
+			select count(rno) from book_reply where bno = #{bno}
+		]]>
+		
+	</select>
+
+</mapper>
+
+
+
+
+
+
