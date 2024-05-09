@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@include file="../includes/header.jsp"%>
+<%@include file="../includes/adminheader.jsp"%>
 
 <style>
     .table th:nth-child(2),
@@ -51,7 +51,7 @@
 		<div class="col-12">
 			<div class="bg-secondary rounded h-100 p-4">
 				<div class="d-flex justify-content-between align-items-center mb-4">
-					<h4 class="mb-0">Whole Board</h4>
+					<h4 class="mb-0">All Board</h4>
 
 				</div>
 
@@ -69,14 +69,14 @@
 							</tr>
 						</thead>
 						<c:choose>
-							<c:when test="${empty list }">
+							<c:when test="${empty boardList }">
 								<tr>
-									<td colspan="5" style="text-align: center;">검색 결과가 없습니다.</td>
+									<td colspan="6" style="text-align: center;">검색 결과가 없습니다.</td>
 								</tr>
 							</c:when>
 
 							<c:otherwise>
-								<c:forEach items="${list }" var="board">
+								<c:forEach items="${boardList }" var="board">
 									<tr>
 										<td><c:out value="${board.type }" /></td>
 										<td>
@@ -191,6 +191,15 @@
 <script type="text/javascript" src="/resources/js/myNav.js"></script> 
 
 <script type="text/javascript">
+	$(document).ready(function() {
+	    let profileLinks = document.querySelectorAll('.navbar-nav a');
+	    profileLinks.forEach(function(link) {
+	        if (link.getAttribute('href').startsWith("/admin/board")) {
+	            link.classList.add('active');
+	        }
+	    });
+	}); 
+
 	$(document)
 			.ready(
 					function() {

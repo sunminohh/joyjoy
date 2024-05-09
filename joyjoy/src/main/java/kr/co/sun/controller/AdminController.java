@@ -19,18 +19,31 @@ public class AdminController {
 	
 	private AdminService service;
 	
-	@RequestMapping("")
-	public String list(Pagination page, Model model) {
+	@RequestMapping("/board")
+	public String boardList(Pagination page, Model model) {
 		
-		log.info("list: " + page);
-		model.addAttribute("list", service.getList(page));
+		log.info("boardList: " + page);
+		model.addAttribute("boardList", service.getBoardList(page));
 		
 		int total = service.getTotal(page);
 		log.info("total: " + total);
 		
 		model.addAttribute("pageMaker", new PageDTO(page, total));
 		
-		return "/admin/home";
+		return "/admin/board";
+	}
+	
+	@RequestMapping("/reply")
+	public String replyList(Pagination page, Model model) {
+		
+		log.info("replyList: " + page);
+		int total = service.getRTotal(page);
+		log.info("total: " + total);
+		
+		model.addAttribute("replyList", service.getReplyList(page));
+		model.addAttribute("pageMaker", new PageDTO(page, total));
+		
+		return "/admin/reply";
 	}
 	
 	

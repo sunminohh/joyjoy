@@ -22,7 +22,7 @@
 		</trim> 
 	</sql>
 	
-	<select id="getListWithPaging" resultType="kr.co.sun.dto.MyBoardList">
+	<select id="getBoardList" resultType="kr.co.sun.dto.MyBoardList">
 	    <![CDATA[
 	        select 
 	            bno, title, content, writer, regdate, updatedate, replycnt, readCnt, type
@@ -69,6 +69,72 @@
 		where
 			<include refid="pagination" />
 			bno > 0
+	</select>
+	
+		<sql id="Rpagination">
+		<trim prefix="(" suffix=") AND" prefixOverrides="OR">
+			<foreach item='item' collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="item == 'T'.toString()">
+							type like '%' || #{keyword} || '%'
+						</when>
+						<when test="item == 'C'.toString()">
+							reply like '%' || #{keyword} || '%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim> 
+	</sql>
+	
+	<select id="getReplyList" resultType="kr.co.sun.dto.ReplyList">
+	    <![CDATA[
+	        select 
+	            rno, bno, reply, replyer, replydate, updateDate,type
+	        from 
+	            (
+	            select 
+	                rownum rn, rno, bno, reply, replyer, replyDate, updateDate,type
+	            from 
+	                (
+	                select * from (
+	                    select * from MOVIE_REPLY 
+	                    UNION ALL
+	                    select * from GAME_REPLY 
+	                    UNION ALL
+	                    select * from BOOK_REPLY 
+	                    UNION ALL
+	                    select * from ETC_REPLY
+	                ) all_replies
+	                order by replyDate desc 
+	                )
+	            where
+	    ]]>
+	    
+	    <include refid="Rpagination"/>
+	    
+	    <![CDATA[
+	               rownum <= #{pageNum} * #{amount}
+	            )
+	        where rn > (#{pageNum} - 1) * #{amount} 
+	    ]]>
+	</select>
+	
+	<select id="getRTotalCount" resultType="int">
+		select count(*) 
+		from (
+	        select * from MOVIE_REPLY 
+	        UNION ALL
+	        select * from GAME_REPLY 
+	        UNION ALL
+	        select * from BOOK_REPLY 
+	        UNION ALL
+	        select * from ETC_REPLY
+	    )
+		where
+			<include refid="Rpagination" />
+			rno > 0
 	</select>
 
 

@@ -87,7 +87,7 @@
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                         
                         <sec:authorize access="hasRole('ROLE_ADMIN')">
-						    <a href="/admin" class="dropdown-item">Admin Page</a>
+						    <a href="/admin/board" class="dropdown-item">Admin Page</a>
                             <a href="/logout" class="dropdown-item">Log Out</a>
 						</sec:authorize>
 						

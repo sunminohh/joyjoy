@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@include file="../includes/myheader.jsp"%>
+<%@include file="../includes/adminheader.jsp"%>
 
 <style>
     .table th:nth-child(2),
@@ -51,7 +51,7 @@
 		<div class="col-12">
 			<div class="bg-secondary rounded h-100 p-4">
 				<div class="d-flex justify-content-between align-items-center mb-4">
-					<h4 class="mb-0">My Reply</h4>
+					<h4 class="mb-0">All Reply</h4>
 
 				</div>
 
@@ -62,6 +62,7 @@
 							<tr>
 								<th scope="col">#게시판</th>
 								<th scope="col" style="text-align: center;">댓글</th>
+								<th scope="col" style="text-align: center;">작성자</th>
 								<th scope="col" style="text-align: center;">작성일</th>
 								<th scope="col" style="text-align: center;">수정일</th>
 							</tr>
@@ -69,7 +70,7 @@
 						<c:choose>
 							<c:when test="${empty replyList }">
 								<tr>
-									<td colspan="4" style="text-align: center;">검색 결과가 없습니다.</td>
+									<td colspan="5" style="text-align: center;">검색 결과가 없습니다.</td>
 								</tr>
 							</c:when>
 
@@ -101,6 +102,7 @@
 										        </c:when>
 										    </c:choose>
 										</td>
+										<td style="text-align: center;"><c:out value="${reply.replyer }" /></td>
 										<td style="text-align: center;"><fmt:formatDate pattern="yyyy-MM-dd"
 												value="${reply.replyDate }" /></td>
 										<td style="text-align: center;"><fmt:formatDate pattern="yyyy-MM-dd"
@@ -114,7 +116,7 @@
 
 				<div class='row'>
 					<div class="col-lg-12">
-						<form id='searchForm' action="/user/myreply" method='get'>
+						<form id='searchForm' action="/admin/reply" method='get'>
 							<select name='type'>
 								<option value=""
 									<c:out value="${pageMaker.page.type == null ? 'selected' : ''}" />>검색
@@ -132,7 +134,6 @@
 								value='<c:out value="${pageMaker.page.pageNum}"/>' /> 
 							<input type='hidden' name='amount'
 								value='<c:out value="${pageMaker.page.amount}"/>' />
-							 <input type="hidden" name="userid" value="${pageContext.request.userPrincipal.name}" />
 							<button class='btn btn-primary btn-sm'>Search</button>
 						</form>
 					</div>
@@ -156,14 +157,13 @@
 								href="${pageMaker.endPage + 1 }">Next</a></li>
 						</c:if>
 					</ul>
-					<form id="actionForm" action="/user/myreply" method="get">
+					<form id="actionForm" action="/admin/reply" method="get">
 						<input type="hidden" name="pageNum" value="${pageMaker.page.pageNum }"> <input type="hidden"
 							name="amount" value="${pageMaker.page.amount }"> 
 						<input type="hidden" name="type"
 							value='<c:out value="${pageMaker.page.type }"/>'> 
 						<input type="hidden" name="keyword"
 							value='<c:out value="${pageMaker.page.keyword }"/>'>
-						<input type="hidden" name="userid" value="${pageContext.request.userPrincipal.name}" />
 					</form>
 				</div>
 
@@ -182,7 +182,7 @@
 	$(document).ready(function() {
 	    let profileLinks = document.querySelectorAll('.navbar-nav a');
 	    profileLinks.forEach(function(link) {
-	        if (link.getAttribute('href').startsWith("/user/myreply")) {
+	        if (link.getAttribute('href').startsWith("/admin/reply")) {
 	            link.classList.add('active');
 	        }
 	    });
