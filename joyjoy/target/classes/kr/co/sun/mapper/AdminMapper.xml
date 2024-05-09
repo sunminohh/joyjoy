@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.sun.mapper.AdminMapper">
+
+	<sql id="pagination">
+		<trim prefix="(" suffix=") AND" prefixOverrides="OR">
+			<foreach item='item' collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="item == 'T'.toString()">
+							title like '%' || #{keyword} || '%'
+						</when>
+						<when test="item == 'C'.toString()">
+							content like '%' || #{keyword} || '%'
+						</when>
+						<when test="item == 'P'.toString()">
+							type like '%' || #{keyword} || '%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim> 
+	</sql>
+	
+	<select id="getListWithPaging" resultType="kr.co.sun.dto.MyBoardList">
+	    <![CDATA[
+	        select 
+	            bno, title, content, writer, regdate, updatedate, replycnt, readCnt, type
+	        from 
+	            (
+	            select 
+	                rownum rn, bno, title, content, writer, regdate, updatedate, replycnt, readCnt, type
+	            from 
+	                (
+	                select * from (
+	                    select * from movie_board where deleted = 'N'
+	                    UNION ALL
+	                    select * from game_board where deleted = 'N'
+	                    UNION ALL
+	                    select * from book_board where deleted = 'N'
+	                    UNION ALL
+	                    select * from etc_board where deleted = 'N'
+	                ) all_boards
+	                order by regdate desc 
+	                )
+	            where
+	    ]]>
+	    
+	    <include refid="pagination"/>
+	    
+	    <![CDATA[
+	                rownum <= #{pageNum} * #{amount}
+	            )
+	        where rn > (#{pageNum} - 1) * #{amount} 
+	    ]]>
+	</select>
+
+	<select id="getTotalCount" resultType="int">
+		select count(*) 
+		from (
+	        select * from movie_board where deleted = 'N'
+	        UNION ALL
+	        select * from game_board where deleted = 'N'
+	        UNION ALL
+	        select * from book_board where deleted = 'N'
+	        UNION ALL
+	        select * from etc_board where deleted = 'N'
+	    )
+		where
+			<include refid="pagination" />
+			bno > 0
+	</select>
+
+
+</mapper>
+
+
+
+
+
+
+
+

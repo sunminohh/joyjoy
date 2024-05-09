@@ -141,6 +141,9 @@
 							type="hidden" name="type" value='<c:out value="${page.type }"/>'>
 						<input type="hidden" name="keyword"
 							value='<c:out value="${page.keyword }"/>'>
+						<sec:authorize access="isAuthenticated()">
+                        	<input type="hidden" name="userid" value="${pageContext.request.userPrincipal.name}" />
+                     	</sec:authorize>
 					</form>
 	
 				</div>
@@ -249,12 +252,14 @@ $(document).ready(function() {
 			} 
 			
 			for(let i=0, len = list.length || 0; i < len; i++) {
+				
 				str += "<hr>";
 				str += "<li class='left clearfix' data-rno='"+list[i].rno+"'>";
 				str += "<div><div class='header'><strong class='primary-font'>"+list[i].replyer+"</strong>";
 				str += "<small class='float-end text-muted'>"+replyService.displayTime(list[i].replyDate)+"</small></div>";
 				str += "<p>"+list[i].reply+"</p></div></li>";
 			}
+			
 			
 			replyUL.html(str);
 			
@@ -545,10 +550,13 @@ $(document).ready(function() {
 		operForm.attr("action", "/book/modify").submit();
 	});
 	
-	$("button[data-oper='list']").on("click", function(e) {
-		operForm.find("#bno").remove();
-		operForm.attr("action", "/book/list")
-		operForm.submit();
+$("button[data-oper='list']").on("click", function(e) {
+		
+		let link = document.referrer;
+        let action = link.includes("user/mypost") ? "/user/mypost" : "/book/list";
+        operForm.find("#bno").remove();
+        operForm.attr("action", action);
+        operForm.submit();
 	});
 	
 });

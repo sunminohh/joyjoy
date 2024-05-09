@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@include file="../includes/header.jsp"%>
 
 <style>
@@ -87,7 +88,16 @@
 														value="${board.replyCnt }" /> ]
 											</b>
 										</a></td>
-										<td><c:out value="${board.writer }"></c:out></td>
+										<td>
+										    <c:choose>
+										        <c:when test="${board.writer.contains('@')}">
+										            <c:out value="${fn:substringBefore(board.writer, '@')}" />
+										        </c:when>
+										        <c:otherwise>
+										            <c:out value="${board.writer}" />
+										        </c:otherwise>
+										    </c:choose>
+										</td>
 										<td style="text-align: center;"><fmt:formatDate pattern="yyyy-MM-dd"
 												value="${board.regDate }" /></td>
 										<td style="text-align: center;"><fmt:formatDate pattern="yyyy-MM-dd"

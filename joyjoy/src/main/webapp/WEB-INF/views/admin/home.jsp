@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@include file="../includes/header.jsp"%>
 
 <style>
@@ -15,12 +14,10 @@
     .paginate_button a {
         color: red; /* 페이지 버튼의 기본 텍스트 색상 */
     }
-
     /* 활성 페이지 버튼에 대한 스타일 */
     .paginate_button.active {
         background-color: red; /* 활성 페이지 버튼의 배경색을 빨간색으로 변경 */
     }
-
     /* 활성 페이지 버튼 텍스트에 대한 스타일 */
     .paginate_button.active a {
         color: white; /* 활성 페이지 버튼의 텍스트 색상을 하얀색으로 변경 */
@@ -54,9 +51,8 @@
 		<div class="col-12">
 			<div class="bg-secondary rounded h-100 p-4">
 				<div class="d-flex justify-content-between align-items-center mb-4">
-					<h4 class="mb-0">Book Board</h4>
-					<button id="regBtn" type="button" class="btn btn-primary btn-sm">Register
-						New Board</button>
+					<h4 class="mb-0">Whole Board</h4>
+
 				</div>
 
 				<div class="table-responsive">
@@ -64,9 +60,9 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th scope="col">#번호</th>
+								<th scope="col">#게시판</th>
 								<th scope="col" style="text-align: center;">제목</th>
-								<th scope="col">작성자</th>
+								<th scope="col" style="text-align: center;">작성자</th>
 								<th scope="col" style="text-align: center;">작성일</th>
 								<th scope="col" style="text-align: center;">수정일</th>
 								<th scope="col" style="text-align: center;">조회</th>
@@ -75,45 +71,55 @@
 						<c:choose>
 							<c:when test="${empty list }">
 								<tr>
-									<td colspan="6" style="text-align: center;">검색 결과가 없습니다.</td>
+									<td colspan="5" style="text-align: center;">검색 결과가 없습니다.</td>
 								</tr>
 							</c:when>
 
 							<c:otherwise>
 								<c:forEach items="${list }" var="board">
 									<tr>
-										<td><c:out value="${board.bno }"></c:out></td>
-										<td><a class='move' href='<c:out value="${board.bno }"/>'>
-												<c:out value="${board.title }" /> <b>[ <c:out
-														value="${board.replyCnt }" /> ]
-											</b>
-										</a></td>
+										<td><c:out value="${board.type }" /></td>
 										<td>
 										    <c:choose>
-										        <c:when test="${board.writer.contains('@')}">
-										            <c:out value="${fn:substringBefore(board.writer, '@')}" />
+										        <c:when test="${board.type eq 'Movie'}">
+										            <a class='' href='/movie/detail?bno=${board.bno}'>
+										                <c:out value="${board.title}" /> <b>[ <c:out value="${board.replyCnt}" /> ]</b>
+										            </a>
 										        </c:when>
-										        <c:otherwise>
-										            <c:out value="${board.writer}" />
-										        </c:otherwise>
+										        <c:when test="${board.type eq 'Game'}">
+										            <a class='' href='/game/detail?bno=${board.bno}'>
+										                <c:out value="${board.title}" /> <b>[ <c:out value="${board.replyCnt}" /> ]</b>
+										            </a>
+										        </c:when>
+										        <c:when test="${board.type eq 'Book'}">
+										            <a class='' href='/book/detail?bno=${board.bno}'>
+										                <c:out value="${board.title}" /> <b>[ <c:out value="${board.replyCnt}" /> ]</b>
+										            </a>
+										        </c:when>
+										        <c:when test="${board.type eq 'Etc'}">
+										            <a class='' href='/etc/detail?bno=${board.bno}'>
+										                <c:out value="${board.title}" /> <b>[ <c:out value="${board.replyCnt}" /> ]</b>
+										            </a>
+										        </c:when>
 										    </c:choose>
 										</td>
+										<td style="text-align: center;"><c:out value="${board.writer }" /></td>
 										<td style="text-align: center;"><fmt:formatDate pattern="yyyy-MM-dd"
 												value="${board.regDate }" /></td>
 										<td style="text-align: center;"><fmt:formatDate pattern="yyyy-MM-dd"
 												value="${board.updateDate }" /></td>
 										<td style="text-align: center;"><c:out value="${board.readCnt }"></c:out></td>
 									</tr>
-								</c:forEach>
-							</c:otherwise>
-						</c:choose>
+								</c:forEach> 
+							</c:otherwise> 
+						</c:choose>	
 					</table>
 				</div>
 
 				<div class='row'>
 					<div class="col-lg-12">
-						<form id='searchForm' action="/book/list" method='get'>
-							<select name='type'>
+						<form id='searchForm' action="/admin" method='get'>
+							<select name='type'
 								<option value=""
 									<c:out value="${pageMaker.page.type == null ? 'selected' : ''}" />>검색
 									조건을 선택해주세요.</option>
@@ -121,22 +127,23 @@
 									<c:out value="${pageMaker.page.type eq 'T' ? 'selected' : ''}" />>제목</option>
 								<option value="C"
 									<c:out value="${pageMaker.page.type eq 'C' ? 'selected' : ''}" />>내용</option>
-								<option value="W"
-									<c:out value="${pageMaker.page.type eq 'W' ? 'selected' : ''}" />>작성자</option>
+								<option value="P"
+									<c:out value="${pageMaker.page.type eq 'P' ? 'selected' : ''}" />>게시판</option>
 								<option value="TC"
 									<c:out value="${pageMaker.page.type eq 'TC' ? 'selected' : ''}" />>제목
 									or 내용</option>
-								<option value="TW"
-									<c:out value="${pageMaker.page.type eq 'TW' ? 'selected' : ''}" />>제목
-									or 작성자</option>
-								<option value="TWC"
-									<c:out value="${pageMaker.page.type eq 'TWC' ? 'selected' : ''}" />>제목
-									or 작성자 or 내용</option>
-							</select> <input type='text' name='keyword'
-								value='<c:out value="${pageMaker.page.keyword}"/>' /> <input
-								type='hidden' name='pageNum'
-								value='<c:out value="${pageMaker.page.pageNum}"/>' /> <input
-								type='hidden' name='amount'
+								<option value="TP"
+									<c:out value="${pageMaker.page.type eq 'TP' ? 'selected' : ''}" />>제목
+									or 게시판</option>
+								<option value="TCP"
+									<c:out value="${pageMaker.page.type eq 'TCP' ? 'selected' : ''}" />>제목
+									or 내용 or 게시판</option>
+							</select> 
+							<input type='text' name='keyword'
+								value='<c:out value="${pageMaker.page.keyword}"/>' /> 
+							<input type='hidden' name='pageNum'
+								value='<c:out value="${pageMaker.page.pageNum}"/>' /> 
+							<input type='hidden' name='amount'
 								value='<c:out value="${pageMaker.page.amount}"/>' />
 							<button class='btn btn-primary btn-sm'>Search</button>
 						</form>
@@ -161,13 +168,12 @@
 								href="${pageMaker.endPage + 1 }">Next</a></li>
 						</c:if>
 					</ul>
-					<form id="actionForm" action="/book/list" method="get">
-						<input type="hidden" name="pageNum"
-							value="${pageMaker.page.pageNum }"> <input type="hidden"
-							name="amount" value="${pageMaker.page.amount }"> <input
-							type="hidden" name="type"
-							value='<c:out value="${pageMaker.page.type }"/>'> <input
-							type="hidden" name="keyword"
+					<form id="actionForm" action="/admin" method="get">
+						<input type="hidden" name="pageNum" value="${pageMaker.page.pageNum }"> <input type="hidden"
+							name="amount" value="${pageMaker.page.amount }"> 
+						<input type="hidden" name="type"
+							value='<c:out value="${pageMaker.page.type }"/>'> 
+						<input type="hidden" name="keyword"
 							value='<c:out value="${pageMaker.page.keyword }"/>'>
 					</form>
 				</div>
@@ -182,6 +188,7 @@
 
 
 <%@include file="../includes/footer.jsp"%>
+<script type="text/javascript" src="/resources/js/myNav.js"></script> 
 
 <script type="text/javascript">
 	$(document)
@@ -208,10 +215,6 @@
 							$("#myModal").modal("show");
 						}
 
-						$("#regBtn").on("click", function() {
-							self.location = "/book/register";
-						});
-
 						let actionForm = $("#actionForm");
 
 						$(".paginate_button a").on(
@@ -226,21 +229,6 @@
 									actionForm.submit();
 								});
 
-						$(".move")
-								.on(
-										"click",
-										function(e) {
-
-											e.preventDefault();
-											actionForm
-													.append("<input type='hidden' name='bno' value='"
-															+ $(this).attr(
-																	"href")
-															+ "'>");
-											actionForm.attr("action",
-													"/book/detail");
-											actionForm.submit();
-										})
 
 						let searchForm = $("#searchForm");
 

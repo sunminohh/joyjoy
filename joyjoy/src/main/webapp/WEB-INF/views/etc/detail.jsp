@@ -141,6 +141,9 @@
 							type="hidden" name="type" value='<c:out value="${page.type }"/>'>
 						<input type="hidden" name="keyword"
 							value='<c:out value="${page.keyword }"/>'>
+						<sec:authorize access="isAuthenticated()">
+                        	<input type="hidden" name="userid" value="${pageContext.request.userPrincipal.name}" />
+                     	</sec:authorize>
 					</form>
 	
 				</div>
@@ -225,6 +228,7 @@ $(document).ready(function() {
 	
 	showList(-1);
 	
+	// 댓글 리스트
 	function showList(page) {
 		
 		console.log("show list " + page);
@@ -249,6 +253,7 @@ $(document).ready(function() {
 			} 
 			
 			for(let i=0, len = list.length || 0; i < len; i++) {
+			
 				str += "<hr>";
 				str += "<li class='left clearfix' data-rno='"+list[i].rno+"'>";
 				str += "<div><div class='header'><strong class='primary-font'>"+list[i].replyer+"</strong>";
@@ -339,14 +344,12 @@ $(document).ready(function() {
 	let csrfTokenValue = "${_csrf.token}";
 	
 	$("#addReplyBtn").on("click", function(e) {
-		
 		modal.find("input").val("");
 		modal.find("input[name='replyer']").val(replyer);
 		modalInputReplyDate.closest("div").hide();
 		modal.find("button[id != 'modalCloseBtn']").hide();
 		
 		modalRegisterBtn.show();
-		
 		$(".modal").modal("show");
 	});
 	
@@ -545,9 +548,12 @@ $(document).ready(function() {
 	});
 	
 	$("button[data-oper='list']").on("click", function(e) {
-		operForm.find("#bno").remove();
-		operForm.attr("action", "/etc/list")
-		operForm.submit();
+		
+		let link = document.referrer;
+        let action = link.includes("user/mypost") ? "/user/mypost" : "/etc/list";
+        operForm.find("#bno").remove();
+        operForm.attr("action", action);
+        operForm.submit();
 	});
 	
 });

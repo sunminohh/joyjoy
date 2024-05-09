@@ -19,6 +19,8 @@ public class EtcBoardVO {
 	private int readCnt;
 	private int replyCnt;
 	
+	private Category category;
+	
 	private List<EtcAttachVO> attachList;
 	
 }

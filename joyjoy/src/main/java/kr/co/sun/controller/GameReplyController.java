@@ -56,7 +56,7 @@ public class GameReplyController {
 	@GetMapping(value = "/pages/{bno}/{page}",
 			produces = {
 					MediaType.APPLICATION_XML_VALUE,
-					MediaType.APPLICATION_JSON_UTF8_VALUE})
+					MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<GameReplyDTO> getList(@PathVariable("page") int page,
 												@PathVariable("bno") Long bno) {
 		
@@ -71,7 +71,7 @@ public class GameReplyController {
 	
 	@GetMapping(value = "/{rno}",
 			produces = {MediaType.APPLICATION_XML_VALUE,
-						MediaType.APPLICATION_JSON_UTF8_VALUE})
+						MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<GameReplyVO> get(@PathVariable("rno") Long rno) {
 		
 		log.info("rno: " + rno);

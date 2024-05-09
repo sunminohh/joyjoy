@@ -53,7 +53,7 @@ public class EtcReplyController {
 	@GetMapping(value = "/pages/{bno}/{page}",
 			produces = {
 					MediaType.APPLICATION_XML_VALUE,
-					MediaType.APPLICATION_JSON_UTF8_VALUE})
+					MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<EtcReplyDTO> getList(@PathVariable("page") int page,
 												@PathVariable("bno") Long bno) {
 		
@@ -68,7 +68,7 @@ public class EtcReplyController {
 	
 	@GetMapping(value = "/{rno}",
 			produces = {MediaType.APPLICATION_XML_VALUE,
-						MediaType.APPLICATION_JSON_UTF8_VALUE})
+						MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<EtcReplyVO> get(@PathVariable("rno") Long rno) {
 		
 		log.info("rno: " + rno);

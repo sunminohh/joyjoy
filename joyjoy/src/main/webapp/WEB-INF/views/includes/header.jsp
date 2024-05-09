@@ -86,7 +86,12 @@
                         
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                         
-                        <sec:authorize access="isAuthenticated()">
+                        <sec:authorize access="hasRole('ROLE_ADMIN')">
+						    <a href="/admin" class="dropdown-item">Admin Page</a>
+                            <a href="/logout" class="dropdown-item">Log Out</a>
+						</sec:authorize>
+						
+                        <sec:authorize access="isAuthenticated() and !hasRole('ROLE_ADMIN')">
                             <a href="/user/profile?userid=${pageContext.request.userPrincipal.name }" class="dropdown-item">My Page</a>
                             <a href="/logout" class="dropdown-item">Log Out</a>
                         </sec:authorize>

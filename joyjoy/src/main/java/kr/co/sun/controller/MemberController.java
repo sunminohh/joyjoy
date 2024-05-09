@@ -3,6 +3,8 @@ package kr.co.sun.controller;
 import javax.servlet.http.HttpServletRequest;
 
 
+
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.sun.domain.AuthVO;
 import kr.co.sun.domain.MemberVO;
-import kr.co.sun.domain.MyPagination;
 import kr.co.sun.domain.Pagination;
-import kr.co.sun.dto.MyPageDTO;
 import kr.co.sun.dto.PageDTO;
 import kr.co.sun.form.MemberJoinForm;
 import kr.co.sun.form.MemberUpdateForm;
@@ -112,22 +112,20 @@ public class MemberController {
 			session.invalidate(); // 세션 무효화
 		}
 		
-		return "redirect:/joyjoy";
+		return "redirect:/";
 	}
 
-	@GetMapping("/list")
-	public void list(Authentication authentication, MyPagination page, Model model) {
-		
-		String currentUserId = authentication.getName();
-	    page.setWriter(currentUserId);
+	@PreAuthorize("isAuthenticated() && #userid == authentication.principal.username")
+	@GetMapping("/mypost")
+	public void list(Pagination page, @RequestParam("userid")String userid, Model model) {
 		
 		log.info("list: " + page);
-		model.addAttribute("list", service.getList(page));
 		
-		int total = service.getTotal(page);
+		int total = service.getTotal(page, userid);
 		log.info("total: " + total);
 		
-		model.addAttribute("pageMaker", new MyPageDTO(page, total));
+		model.addAttribute("list", service.getList(page, userid));
+		model.addAttribute("pageMaker", new PageDTO(page, total));
 	}
 	
 	

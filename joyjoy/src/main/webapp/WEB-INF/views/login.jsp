@@ -103,7 +103,7 @@
     <script type="text/javascript">
     
     $(document).ready(function() {
-    	Kakao.init('8ea600964b420ea3797f486c026bbe0d');
+    	Kakao.init('db1c95826e65baec36478b2ec61dbe0d');
     	Kakao.isInitialized();
     });
     

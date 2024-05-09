@@ -23,14 +23,14 @@ public class authCheckController {
 	
     @GetMapping(value = "/checkId",
     			produces = {
-					MediaType.APPLICATION_JSON_UTF8_VALUE})
+					MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Boolean> checkId(@RequestParam("userid") String userid) {
         return ResponseEntity.ok(service.getUserById(userid) != null);
     }
 	
 	@GetMapping(value = "/checkEmail",
 				produces = {
-				MediaType.APPLICATION_JSON_UTF8_VALUE})
+				MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<Boolean> checkEmail(@RequestParam("userEmail") String userEmail){
 		
 		return ResponseEntity.ok(service.getUserByEmail(userEmail) != null);

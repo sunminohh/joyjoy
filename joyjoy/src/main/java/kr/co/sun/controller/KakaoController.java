@@ -48,15 +48,17 @@ public class KakaoController {
 		String userName = (String)result.get("nickname");
 		String email = (String)result.get("email");
 		String userpw = snsId;
-		
 		log.info(snsId);
 		
 		// 분기
 		MemberVO memberVo = new MemberVO();
 		// 일치하는 snsId 없을 시 회원가입
 		if(memberService.kakaoLogin(snsId) == null) {
+			
 			log.warn("카카오로 회원가입");
-			memberVo.setUserid(email);
+			
+			String userid = email.substring(0, email.indexOf('@'));
+			memberVo.setUserid(userid);
 			memberVo.setUserpw(userpw);
 			memberVo.setUserName(userName);
 			memberVo.setSnsId(snsId);
@@ -64,7 +66,7 @@ public class KakaoController {
 			memberService.kakaoJoin(memberVo);
 			
 			AuthVO auth = new AuthVO();
-			auth.setUserid(email);
+			auth.setUserid(userid);
 			auth.setAuth("ROLE_USER");
 			
 			memberService.insertRole(auth);
@@ -73,6 +75,7 @@ public class KakaoController {
 		// 일치하는 snsId가 있으면 멤버객체에 담음
 		log.warn("카카오로 로그인");
 		String userid = memberService.findUserBySnsId(snsId);
+		log.info("findUserBySnsId: " +userid);
 		MemberVO vo = memberService.getUserById(userid);
 		log.warn("member : " +vo);
 		CustomUser user = new CustomUser(vo);

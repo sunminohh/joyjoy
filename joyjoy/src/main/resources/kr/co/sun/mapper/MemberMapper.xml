@@ -69,6 +69,21 @@
 			(#{userid}, #{userpw}, #{userName}, #{userEmail}, #{snsId})
 	</insert>
 	
+	<!-- snsId로 회원정보 얻기 -->
+	<select id="kakaoSelect" resultType="kr.co.sun.domain.MemberVO" parameterType="String">
+	    SELECT userid, username, useremail 
+	    FROM tbl_member 
+	    WHERE snsId = #{snsId}
+	</select>
+	
+	<!-- snsId로 회원 아이디 찾기 -->
+	<select id="findUserBySnsId" resultType="String" parameterType="String">
+	    SELECT userid 
+	    FROM tbl_member 
+	    WHERE snsId = #{snsId}
+	</select>
+		
+	
     <update id="updateUser" parameterType="kr.co.sun.domain.MemberVO">
     	update tbl_member
     	<set>
@@ -99,17 +114,17 @@
 	
 	<sql id="pagination">
 		<trim prefix="(" suffix=") AND" prefixOverrides="OR">
-			<foreach item='item' collection="typeArr">
+			<foreach item='item' collection="page.typeArr">
 				<trim prefix="OR">
 					<choose>
 						<when test="item == 'T'.toString()">
-							title like '%' || #{keyword} || '%'
+							title like '%' || #{page.keyword} || '%'
 						</when>
 						<when test="item == 'C'.toString()">
-							content like '%' || #{keyword} || '%'
+							content like '%' || #{page.keyword} || '%'
 						</when>
 						<when test="item == 'P'.toString()">
-							type like '%' || #{keyword} || '%'
+							type like '%' || #{page.keyword} || '%'
 						</when>
 					</choose>
 				</trim>
@@ -128,13 +143,13 @@
 	            from 
 	                (
 	                select * from (
-	                    select * from movie_board where writer = #{writer} and deleted = 'N'
+	                    select * from movie_board where writer = #{userid} and deleted = 'N'
 	                    UNION ALL
-	                    select * from game_board where writer = #{writer} and deleted = 'N'
+	                    select * from game_board where writer = #{userid} and deleted = 'N'
 	                    UNION ALL
-	                    select * from book_board where writer = #{writer} and deleted = 'N'
+	                    select * from book_board where writer = #{userid} and deleted = 'N'
 	                    UNION ALL
-	                    select * from etc_board where writer = #{writer} and deleted = 'N'
+	                    select * from etc_board where writer = #{userid} and deleted = 'N'
 	                ) all_boards
 	                order by regdate desc 
 	                )
@@ -144,9 +159,9 @@
 	    <include refid="pagination"/>
 	    
 	    <![CDATA[
-	                rownum <= #{pageNum} * #{amount}
+	               rownum <= #{page.pageNum} * #{page.amount}
 	            )
-	        where rn > (#{pageNum} - 1) * #{amount} 
+	        where rn > (#{page.pageNum} - 1) * #{page.amount} 
 	    ]]>
 	</select>
 
@@ -155,13 +170,13 @@
 	<select id="getTotalCount" resultType="int">
 		select count(*) 
 		from (
-	        select * from movie_board where deleted = 'N'
+	        select * from movie_board where writer = #{userid} and deleted = 'N'
 	        UNION ALL
-	        select * from game_board where deleted = 'N'
+	        select * from game_board where writer = #{userid} and deleted = 'N'
 	        UNION ALL
-	        select * from book_board where deleted = 'N'
+	        select * from book_board where writer = #{userid} and deleted = 'N'
 	        UNION ALL
-	        select * from etc_board where deleted = 'N'
+	        select * from etc_board where writer = #{userid} and deleted = 'N'
 	    )
 		where
 			<include refid="pagination" />

@@ -39,7 +39,7 @@ public class KakaoService {
              BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
              StringBuilder sb = new StringBuilder();
              sb.append("grant_type=authorization_code");
-             sb.append("&client_id=6063711ce8fa1c4346c0542292be495a");  //앱 KEY VALUE
+             sb.append("&client_id=d959ba71c9b91295cadb3bc286ee965b");  //앱 KEY VALUE
              sb.append("&redirect_uri=http://localhost:8080/kakao/callback"); // 앱 CALLBACK 경로
              sb.append("&code=" + code);
              bw.write(sb.toString());

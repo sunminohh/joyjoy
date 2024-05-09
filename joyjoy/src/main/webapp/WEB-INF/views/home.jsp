@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@include file="includes/header.jsp"%>
 
 <style>
@@ -51,11 +52,29 @@
 	                                    <tr>
 	                                      <td><c:out value="${movie.bno }"></c:out></td>
 										<td>
-											<a href="/movie/detail?bno=${movie.bno}"><c:out value="${movie.title}" /> 
-											<b>[ <c:out value="${movie.replyCnt}" /> ]</b>
-											</a>
+										    <a href="/movie/detail?bno=${movie.bno}">
+										        <c:set var="title" value="${movie.title}" />
+										        <c:choose>
+										            <c:when test="${fn:length(title) > 20}">
+										                <c:out value="${fn:substring(title, 0, 20)}" />...
+										            </c:when>
+										            <c:otherwise>
+										                <c:out value="${title}" />
+										            </c:otherwise>
+										        </c:choose>
+										        <b>[ <c:out value="${movie.replyCnt}" /> ]</b>
+										    </a>
 										</td>
-										<td><c:out value="${movie.writer }"></c:out></td>
+										<td>
+										    <c:choose>
+										        <c:when test="${movie.writer.contains('@')}">
+										            <c:out value="${fn:substringBefore(movie.writer, '@')}" />
+										        </c:when>
+										        <c:otherwise>
+										            <c:out value="${movie.writer}" />
+										        </c:otherwise>
+										    </c:choose>
+										</td>
 										<td style="text-align: center;"><fmt:formatDate pattern="yyyy-MM-dd"
 												value="${movie.regDate }" /></td>
 										<td style="text-align: center;"><c:out value="${movie.readCnt }"></c:out></td>
@@ -86,11 +105,29 @@
 	                                    <tr>
 	                                      <td><c:out value="${game.bno }"></c:out></td>
 										<td>
-											<a href="/game/detail?bno=${game.bno}"><c:out value="${game.title}" /> 
-											<b>[ <c:out value="${game.replyCnt}" /> ]</b>
-											</a>
+										    <a href="/game/detail?bno=${game.bno}">
+										        <c:set var="title" value="${game.title}" />
+										        <c:choose>
+										            <c:when test="${fn:length(title) > 20}">
+										                <c:out value="${fn:substring(title, 0, 20)}" />...
+										            </c:when>
+										            <c:otherwise>
+										                <c:out value="${title}" />
+										            </c:otherwise>
+										        </c:choose>
+										        <b>[ <c:out value="${game.replyCnt}" /> ]</b>
+										    </a>
 										</td>
-										<td><c:out value="${game.writer }"></c:out></td>
+										<td>
+										    <c:choose>
+										        <c:when test="${game.writer.contains('@')}">
+										            <c:out value="${fn:substringBefore(game.writer, '@')}" />
+										        </c:when>
+										        <c:otherwise>
+										            <c:out value="${game.writer}" />
+										        </c:otherwise>
+										    </c:choose>
+										</td>
 										<td style="text-align: center;"><fmt:formatDate pattern="yyyy-MM-dd"
 												value="${game.regDate }" /></td>
 										<td style="text-align: center;"><c:out value="${game.readCnt }"></c:out></td>
@@ -121,11 +158,29 @@
 	                                    <tr>
 	                                      <td><c:out value="${book.bno }"></c:out></td>
 										<td>
-											<a href="/book/detail?bno=${book.bno}"><c:out value="${book.title}" /> 
-											<b>[ <c:out value="${book.replyCnt}" /> ]</b>
-											</a>
+										    <a href="/book/detail?bno=${book.bno}">
+										        <c:set var="title" value="${book.title}" />
+										        <c:choose>
+										            <c:when test="${fn:length(title) > 20}">
+										                <c:out value="${fn:substring(title, 0, 20)}" />...
+										            </c:when>
+										            <c:otherwise>
+										                <c:out value="${title}" />
+										            </c:otherwise>
+										        </c:choose>
+										        <b>[ <c:out value="${book.replyCnt}" /> ]</b>
+										    </a>
 										</td>
-										<td><c:out value="${book.writer }"></c:out></td>
+										<td>
+										    <c:choose>
+										        <c:when test="${book.writer.contains('@')}">
+										            <c:out value="${fn:substringBefore(book.writer, '@')}" />
+										        </c:when>
+										        <c:otherwise>
+										            <c:out value="${book.writer}" />
+										        </c:otherwise>
+										    </c:choose>
+										</td>
 										<td style="text-align: center;"><fmt:formatDate pattern="yyyy-MM-dd"
 												value="${book.regDate }" /></td>
 										<td style="text-align: center;"><c:out value="${book.readCnt }"></c:out></td>
@@ -156,11 +211,29 @@
 	                                    <tr>
 	                                      <td><c:out value="${etc.bno }"></c:out></td>
 										<td>
-											<a href="/etc/detail?bno=${etc.bno}"><c:out value="${etc.title}" /> 
-											<b>[ <c:out value="${etc.replyCnt}" /> ]</b>
-											</a>
+										    <a href="/etc/detail?bno=${etc.bno}">
+										        <c:set var="title" value="${etc.title}" />
+										        <c:choose>
+										            <c:when test="${fn:length(title) > 20}">
+										                <c:out value="${fn:substring(title, 0, 20)}" />...
+										            </c:when>
+										            <c:otherwise>
+										                <c:out value="${title}" />
+										            </c:otherwise>
+										        </c:choose>
+										        <b>[ <c:out value="${etc.replyCnt}" /> ]</b>
+										    </a>
 										</td>
-										<td><c:out value="${etc.writer }"></c:out></td>
+										<td>
+										    <c:choose>
+										        <c:when test="${etc.writer.contains('@')}">
+										            <c:out value="${fn:substringBefore(etc.writer, '@')}" />
+										        </c:when>
+										        <c:otherwise>
+										            <c:out value="${etc.writer}" />
+										        </c:otherwise>
+										    </c:choose>
+										</td>
 										<td style="text-align: center;"><fmt:formatDate pattern="yyyy-MM-dd"
 												value="${etc.regDate }" /></td>
 										<td style="text-align: center;"><c:out value="${etc.readCnt }"></c:out></td>

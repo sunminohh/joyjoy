@@ -2,9 +2,9 @@ package kr.co.sun.service;
 
 import java.util.List;
 
+
 import kr.co.sun.domain.AuthVO;
 import kr.co.sun.domain.MemberVO;
-import kr.co.sun.domain.MyPagination;
 import kr.co.sun.domain.Pagination;
 import kr.co.sun.dto.MyBoardList;
 import kr.co.sun.form.MemberUpdateForm;
@@ -34,7 +34,7 @@ public interface MemberService {
 	public void deleteUser(String userid);
 	
 
-	public List<MyBoardList> getList(MyPagination page);
+	public List<MyBoardList> getList(Pagination page, String userid);
 	
-	public int getTotal(MyPagination page);
+	public int getTotal(Pagination page, String userid);
 }

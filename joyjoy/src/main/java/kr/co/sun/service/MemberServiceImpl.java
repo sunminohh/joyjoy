@@ -2,6 +2,7 @@ package kr.co.sun.service;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.sun.domain.AuthVO;
 import kr.co.sun.domain.MemberVO;
-import kr.co.sun.domain.MyPagination;
 import kr.co.sun.domain.Pagination;
 import kr.co.sun.dto.MyBoardList;
 import kr.co.sun.form.MemberUpdateForm;
@@ -106,17 +106,17 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MyBoardList> getList(MyPagination page) {
+	public List<MyBoardList> getList(Pagination page, String userid) {
 		
 		log.info("get List with pagination: " + page);
-		return mapper.getListWithPaging(page);
+		return mapper.getListWithPaging(page, userid);
 	}
 
 	@Override
-	public int getTotal(MyPagination page) {
+	public int getTotal(Pagination page, String userid) {
 		
 		log.info("get total count");
-		return mapper.getTotalCount(page);
+		return mapper.getTotalCount(page, userid);
 	}
 
 	

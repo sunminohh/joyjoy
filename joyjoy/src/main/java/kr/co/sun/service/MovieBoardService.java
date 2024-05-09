@@ -41,7 +41,6 @@ public class MovieBoardService {
 		}
 		
 		board.getAttachList().forEach(attach -> {
-			
 			attach.setBno(board.getBno());
 			attachMapper.insert(attach);
 		});
@@ -73,7 +72,6 @@ public class MovieBoardService {
 		boolean modifyResult = mapper.update(board) == 1;
 		
 		if (modifyResult && board.getAttachList() != null && board.getAttachList().size() > 0) {
-			
 			board.getAttachList().forEach(attach -> {
 				
 				attach.setBno(board.getBno());

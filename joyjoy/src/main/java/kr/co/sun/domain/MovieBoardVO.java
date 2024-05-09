@@ -19,6 +19,8 @@ public class MovieBoardVO {
 	private int readCnt;
 	private int replyCnt;
 	
+	private Category category;
+	
 	private List<MovieAttachVO> attachList;
 	
 }
