@@ -12,6 +12,7 @@ import kr.co.sun.domain.AuthVO;
 import kr.co.sun.domain.MemberVO;
 import kr.co.sun.domain.Pagination;
 import kr.co.sun.dto.MyBoardList;
+import kr.co.sun.dto.MyReplyList;
 
 public interface MemberMapper { 
 
@@ -44,8 +45,10 @@ public interface MemberMapper {
 	//@Select("select userid from tbl_member where snsId = #{snsId}")
 	String findUserBySnsId(String snsId);
 	
-	public List<MyBoardList> getListWithPaging(@Param("page")Pagination page, @Param("userid") String userid);
+	public List<MyBoardList> getMyPost(@Param("page")Pagination page, @Param("userid") String userid);
 	public int getTotalCount(@Param("page")Pagination page, @Param("userid") String userid);
 	
+	public List<MyReplyList> getMyReply(@Param("page")Pagination page, @Param("userid")String userid);
+	public int getRTotalCount(@Param("page")Pagination page, @Param("userid")String userid);
 	
 }

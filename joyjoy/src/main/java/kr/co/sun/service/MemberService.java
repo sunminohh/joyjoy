@@ -7,6 +7,7 @@ import kr.co.sun.domain.AuthVO;
 import kr.co.sun.domain.MemberVO;
 import kr.co.sun.domain.Pagination;
 import kr.co.sun.dto.MyBoardList;
+import kr.co.sun.dto.MyReplyList;
 import kr.co.sun.form.MemberUpdateForm;
 
 public interface MemberService {
@@ -34,7 +35,11 @@ public interface MemberService {
 	public void deleteUser(String userid);
 	
 
-	public List<MyBoardList> getList(Pagination page, String userid);
-	
+	public List<MyBoardList> getPost(Pagination page, String userid);
 	public int getTotal(Pagination page, String userid);
+	
+	public List<MyReplyList> getReply(Pagination page, String userid);
+	public int getRTotal(Pagination page, String userid);
+	
+	
 }

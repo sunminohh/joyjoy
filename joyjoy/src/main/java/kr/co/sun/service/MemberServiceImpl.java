@@ -13,6 +13,7 @@ import kr.co.sun.domain.AuthVO;
 import kr.co.sun.domain.MemberVO;
 import kr.co.sun.domain.Pagination;
 import kr.co.sun.dto.MyBoardList;
+import kr.co.sun.dto.MyReplyList;
 import kr.co.sun.form.MemberUpdateForm;
 import kr.co.sun.mapper.MemberMapper;
 import lombok.Setter;
@@ -100,16 +101,15 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	@Override
 	public void deleteUser(String userid) {
-		
 		mapper.deleteUserRole(userid);
 		mapper.deleteUser(userid);
 	}
 
 	@Override
-	public List<MyBoardList> getList(Pagination page, String userid) {
+	public List<MyBoardList> getPost(Pagination page, String userid) {
 		
 		log.info("get List with pagination: " + page);
-		return mapper.getListWithPaging(page, userid);
+		return mapper.getMyPost(page, userid);
 	}
 
 	@Override
@@ -117,6 +117,20 @@ public class MemberServiceImpl implements MemberService {
 		
 		log.info("get total count");
 		return mapper.getTotalCount(page, userid);
+	}
+
+	@Override
+	public List<MyReplyList> getReply(Pagination page, String userid) {
+
+		log.info("get reply with pagination: " + page);
+		return mapper.getMyReply(page, userid);
+	}
+
+	@Override
+	public int getRTotal(Pagination page, String userid) {
+		
+		log.info("get Rtotal count" );
+		return mapper.getRTotalCount(page, userid);
 	}
 
 	

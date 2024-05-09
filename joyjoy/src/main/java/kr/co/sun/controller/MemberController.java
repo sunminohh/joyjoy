@@ -1,5 +1,7 @@
 package kr.co.sun.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import kr.co.sun.domain.AuthVO;
 import kr.co.sun.domain.MemberVO;
 import kr.co.sun.domain.Pagination;
+import kr.co.sun.dto.MyReplyList;
 import kr.co.sun.dto.PageDTO;
 import kr.co.sun.form.MemberJoinForm;
 import kr.co.sun.form.MemberUpdateForm;
@@ -124,7 +127,26 @@ public class MemberController {
 		int total = service.getTotal(page, userid);
 		log.info("total: " + total);
 		
-		model.addAttribute("list", service.getList(page, userid));
+		model.addAttribute("list", service.getPost(page, userid));
+		model.addAttribute("pageMaker", new PageDTO(page, total));
+	}
+	
+	
+	@PreAuthorize("isAuthenticated() && #userid == authentication.principal.username")
+	@GetMapping("/myreply")
+	public void myReply(Pagination page, @RequestParam("userid")String userid, Model model) {
+		
+		log.info("replyList: " + page);
+		
+		int total = service.getRTotal(page, userid);
+		log.info("total: " + total);
+		
+		
+		List<MyReplyList> replies = service.getReply(page, userid);
+		System.out.println("Model Data:" + replies);
+		
+		
+		model.addAttribute("replyList", service.getReply(page, userid));
 		model.addAttribute("pageMaker", new PageDTO(page, total));
 	}
 	

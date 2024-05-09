@@ -553,7 +553,7 @@ $(document).ready(function() {
 $("button[data-oper='list']").on("click", function(e) {
 		
 		let link = document.referrer;
-        let action = link.includes("user/mypost") ? "/user/mypost" : "/book/list";
+		let action = link.includes("user/mypost") ? "/user/mypost" : link.includes("user/myreply") ? "/user/myreply" : "/book/list";
         operForm.find("#bno").remove();
         operForm.attr("action", action);
         operForm.submit();

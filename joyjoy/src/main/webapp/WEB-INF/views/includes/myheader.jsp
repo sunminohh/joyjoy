@@ -57,7 +57,7 @@
                 <div class="navbar-nav w-100">
                     <a href="/user/profile?userid=${pageContext.request.userPrincipal.name }" class="nav-item nav-link"><i class="fa fa-user me-2"></i>Profile</a>
                     <a href="/user/mypost?userid=${pageContext.request.userPrincipal.name }" class="nav-item nav-link"><i class="fa fa-star me-2"></i>Post</a>
-                    <a href="#" class="nav-item nav-link"><i class="fa fa-star me-2"></i>Comment</a>
+                    <a href="/user/myreply?userid=${pageContext.request.userPrincipal.name }" class="nav-item nav-link"><i class="fa fa-star me-2"></i>Reply</a>
                 </div>
             </nav>
         </div>
